@@ -1,6 +1,5 @@
-{ extends "base.html" } {% block title %}{{month_name | title }}'s Challenge
-{%
-endblock %} 
+{% extends "base.html" %} {% block title %}{{month_name | title }}'s Challenge
+{% endblock %} 
 
 {% block content %}
 <h1>This Months's Challanges</h1>
@@ -10,5 +9,4 @@ endblock %}
 <p>There is no challenge for this month yet!</p>
 {% endif %}
 <h2>{{challenge }}</h2>
-{% endblock %} {% extends "base.html" %} {% block title %}{{month_name | title
-}}'s Challenge{% endblock %} {% endblock %}
+{% endblock %} 

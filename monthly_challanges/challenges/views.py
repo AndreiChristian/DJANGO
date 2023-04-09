@@ -39,8 +39,8 @@ def monthly_challange_by_number(request, month):
 
 
 def monthly_challenge(request, month):
-    try:
+    # try:
         challenge_text = monthly_challenges[month]
         return render(request, "challenges/challenge.html", {"month_name": month, "challenge": challenge_text})
-    except:
-        return HttpResponseNotFound("<h1>This page is not suported!</h1>")
+    # except:
+        # return HttpResponseNotFound("<h1>This page is not suported!</h1>")
