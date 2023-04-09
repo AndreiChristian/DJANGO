@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
+
 # from django.template.loader import render_to_string
 
 monthly_challenges = {
@@ -39,8 +40,8 @@ def monthly_challange_by_number(request, month):
 
 
 def monthly_challenge(request, month):
-    # try:
+    try:
         challenge_text = monthly_challenges[month]
         return render(request, "challenges/challenge.html", {"month_name": month, "challenge": challenge_text})
-    # except:
-        # return HttpResponseNotFound("<h1>This page is not suported!</h1>")
+    except:
+        raise Http404()

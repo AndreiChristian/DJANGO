@@ -2,6 +2,10 @@
 {% endblock %} 
 
 {% block content %}
+
+{% include "./shared/header.html" %}
+
+
 <h1>This Months's Challanges</h1>
 {% if text is not None %}
 <h2>{{month_name | title }}</h2>
