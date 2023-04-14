@@ -30,7 +30,7 @@ class FacilityItem(models.Model):
 class FacilityGroup(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    facility_items = models.ManyToManyField(FacilityItem)
+    facility_items = models.ManyToManyField(FacilityItem, blank=True)
 
     def __str__(self):
         return self.name

@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ish.models import FacilityItem
-from ish.serializers import FacilityItemSerializer
+from ish.models import FacilityItem, FacilityGroup
+from ish.serializers import FacilityItemSerializer, FacilityGroupSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -47,3 +47,30 @@ def facility_item_detail(request, pk):
     elif request.method == 'DELETE':
         FacilityItem.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+@api_view(['GET','POST'])
+def facility_group_list(request):
+    if request.method == 'GET':
+        facility_groups = FacilityGroup.objects.all()
+        serializer = FacilityGroupSerializer(facility_groups, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        name = request.data.get('name')
+        description = request.data.get('description')
+        item_ids = request.data.get('facility_items', [])
+
+        if not name or not description or not item_ids:
+            # Ensure that all required fields are provided
+            return Response({'error': 'Missing required form data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        facility_items = FacilityItem.objects.filter(id__in=item_ids)
+        facility_group = FacilityGroup.objects.create(
+            name=name,
+            description=description
+        )
+        facility_group.facility_items.set(facility_items)
+        facility_group.save()
+
+        serializer = FacilityGroupSerializer(facility_group)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
