@@ -1,22 +1,22 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from books.models import Book
-from books.serializers import BookSerializer
+from ish.models import FacilityItem
+from ish.serializers import FacilityItemSerializer
 
 
 @api_view(['GET', 'POST'])
-def book_list(request):
+def facility_item_list(request):
     """
     List all code snippets, or create a new snippet.
     """
     if request.method == 'GET':
-        books = Book.objects.all()
-        serializer = BookSerializer(books, many=True)
+        faciliy_items = FacilityItem.objects.all()
+        serializer = FacilityItemSerializer(faciliy_items, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = BookSerializer(data=request.data)
+        serializer = FacilityItemSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

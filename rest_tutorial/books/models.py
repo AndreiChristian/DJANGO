@@ -11,3 +11,4 @@ class Book(models.Model):
     author = models.TextField()
     inStock = models.BooleanField(default=True)
     genre = models.CharField(max_length=100)
+
