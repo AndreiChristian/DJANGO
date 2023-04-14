@@ -21,3 +21,29 @@ def facility_item_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def facility_item_detail(request, pk):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        facilityItem = FacilityItem.objects.get(pk=pk)
+    except facilityItem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = FacilityItemSerializer(facilityItem)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = FacilityItemSerializer(facilityItem, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        FacilityItem.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

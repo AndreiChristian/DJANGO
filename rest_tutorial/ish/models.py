@@ -25,3 +25,12 @@ class FacilityItem(models.Model):
     level = models.CharField(max_length=2, choices=facility_item_level_choices)
     included = models.BooleanField(default=True)
     extraPrice = models.IntegerField(default=0)
+
+
+class FacilityGroup(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    facility_items = models.ManyToManyField(FacilityItem)
+
+    def __str__(self):
+        return self.name
