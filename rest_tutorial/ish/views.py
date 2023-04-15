@@ -57,25 +57,11 @@ def facility_group_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        name = request.data.get('name')
-        description = request.data.get('description')
-        item_ids = request.data.get('facility_items', [])
-
-        if not name or not description or not item_ids:
-            # Ensure that all required fields are provided
-            return Response({'error': 'Missing required form data'}, status=status.HTTP_400_BAD_REQUEST)
-
-        facility_group = FacilityGroup.objects.create(
-            name=name,
-            description=description
-        )
-        if item_ids:
-            facility_items = FacilityItem.objects.filter(id__in=item_ids)
-            facility_group.facility_items.set(facility_items)
-            facility_group.save()
-
-        serializer = FacilityGroupSerializer(facility_group)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer = FacilityGroupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
@@ -89,9 +75,8 @@ def facility_category_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = FacilityCategorySerializer(data=request.data)
+        serializer = FacilityGroupSerializer(data=request.data)
         if serializer.is_valid():
-            print(serializer.validated_data)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -111,8 +96,13 @@ def facility_category_detail(request, pk):
         serializer = FacilityCategorySerializer(facility_category_detail)
         return Response(serializer.data)
 
+    # if request.method == "POST":
+    #     serializer = FacilityCategorySerializer(
+    #         facility_category_detail, data=request.data)
+    #     if serializer.is_valid():
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     elif request.method == "DELETE":
         facility_category_detail.delete()
-        faciliy_categories = FacilityCategory.objects.all()
-        serializer = FacilityCategorySerializer(faciliy_categories, many=True)
-        return Response(serializer.data)
+        return Response(status=status.HTTP_204_NO_CONTENT)

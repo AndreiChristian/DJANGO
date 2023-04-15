@@ -27,16 +27,15 @@ class FacilityItem(models.Model):
     extraPrice = models.IntegerField(default=0)
 
 
-class FacilityGroup(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    facility_items = models.ManyToManyField(FacilityItem, blank=True)
-
-    def __str__(self):
-        return self.name
-
-
 class FacilityCategory(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
 
+
+class FacilityGroup(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    category = models.ForeignKey(FacilityCategory, on_delete=models.CASCADE, null=True )
+
+    def __str__(self):
+        return self.name

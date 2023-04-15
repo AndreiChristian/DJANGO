@@ -8,17 +8,18 @@ class FacilityItemSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class FacilityGroupSerializer(serializers.ModelSerializer):
-
-    facility_items = FacilityItemSerializer(many=True)
-
-    class Meta:
-        model = FacilityGroup
-        fields = "__all__"
-
-
 class FacilityCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FacilityCategory
         fields = "__all__"
+
+class FacilityGroupSerializer(serializers.ModelSerializer):
+    category = serializers.PrimaryKeyRelatedField(queryset=FacilityCategory.objects.all())
+
+    class Meta:
+        model = FacilityGroup
+        fields = ['id', 'name', 'description', 'category']
+
+
+
