@@ -1,13 +1,12 @@
 from rest_framework.viewsets import ModelViewSet
-from pizzaria.models import Order, Pizza, Topping
+
+from pizzaria.models import Box, Order, Pizza, Topping
 from pizzaria.serializers import (
     OrderSummarySerializer,
     OrderDetailSerializer,
     PizzaSerializer,
     ToppingSerializer
 )
-
-# Create your views here.
 
 
 class ToppingViewSet(ModelViewSet):
