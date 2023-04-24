@@ -3,8 +3,10 @@ from django.db import models
 # Create your models here.
 
 class Category(models.Model):
-    name = models.Charfield(max_length=100)
+    name = models.CharField(max_length=100)
     description = models.TextField()
+
+
 class Book(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
