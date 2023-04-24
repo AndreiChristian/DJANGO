@@ -1,11 +1,19 @@
 from rest_framework import serializers
-from snippets.models import Book
+from snippets.models import Book, Category
 
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['id', 'title', 'description', 'size', 'price']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    books = BookSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'description', 'books']
 
 
 '''

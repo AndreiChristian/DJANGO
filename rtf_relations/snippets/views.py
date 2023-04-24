@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from snippets.models import Book
-from snippets.serializers import BookSerializer
+from snippets.models import Book, Category
+from snippets.serializers import BookSerializer, CategorySerializer
 
 
 @api_view(['GET', 'POST'])
@@ -48,6 +48,47 @@ def book_detail(request, pk, format=None):
     if request.method == "DELETE":
         book.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'POST'])
+def category_list(request, format=None):
+
+    if request.method == "GET":
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+
+    if request.method == "POST":
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def category_detail(request, pk, format=None):
+
+    try:
+        category = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = CategorySerializer(category)
+        return Response(serializer.data)
+
+    if request.method == "PUT":
+        serializer = CategorySerializer(category, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    if request.method == "DELETE":
+        category.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # VERSION 1
 # ____________________________________________________________________
