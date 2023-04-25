@@ -11,5 +11,8 @@ from . import views
 # ]
 
 urlpatterns = [
-    path('categories/',views.categories_list, name="category_list")
+    # path('categories/<int:pk>/',views.categories_detail, name="category_list"),
+    path('categories/<int:pk>/',views.categories_detail, name="category_list"),
+    path('categories/',views.categories_list, name="category_list"),
+    path('subcategories/',views.subcategories_list, name="subcategory_list")
 ]
