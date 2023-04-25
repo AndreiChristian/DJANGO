@@ -21,18 +21,24 @@ class ClientSerializer(serializers.ModelSerializer):
 
 
 class PizzaSerializer(serializers.ModelSerializer):
-    dough = DoughSerializer()
-    toppings = ToppingSerializer(many=True)
+    dough = serializers.PrimaryKeyRelatedField(queryset=Dough.objects.all())
+    toppings = serializers.PrimaryKeyRelatedField(queryset=Topping.objects.all(), many=True)
 
     class Meta:
         model = Pizza
         fields = ['id', 'dough', 'toppings']
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['dough'] = DoughSerializer(instance.dough).data
+        representation['toppings'] = ToppingSerializer(instance.toppings.all(), many=True).data
+        return representation
 
 class OrderSerializer(serializers.ModelSerializer):
-    client = ClientSerializer()
-    pizzas = PizzaSerializer(many=True)
+    client = serializers.PrimaryKeyRelatedField(queryset=Client.objects.all())
+    pizza = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all())
 
     class Meta:
         model = Order
-        fields = ['id', 'client', 'pizzas', 'created_at', 'updated_at']
+        fields = ['id', 'client', 'pizza', 'date']
+
