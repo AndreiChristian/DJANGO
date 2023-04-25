@@ -25,3 +25,8 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 
     # def create_subcategory(self, instance, validated_data):
         
+class SubcategoryDetailSerializer(serializers.ModelSerializer):
+    pass
+
+class ItemSerializer(serializers.ModelSerializer):
+    pass
