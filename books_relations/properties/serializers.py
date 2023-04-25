@@ -1,11 +1,12 @@
 from rest_framework import serializers
-from .models import Property, FacilityCategory, FacilityItem, FacilitySubCategory
+from .models import Property, FacilityCategory, FacilityItem, FacilitySubCategory, Reservation
+from django.contrib.auth.models import User
 
 
 class FacilityItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = FacilityItem
-        fields = ['id', 'name','subcategory']
+        fields = ['id', 'name', 'subcategory']
 
 
 class FacilitySubCategorySerializer(serializers.ModelSerializer):
@@ -51,4 +52,28 @@ class PropertySerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['facility_categories'] = FacilityCategorySerializer(
             instance.facility_categories.all(), many=True).data
+        return representation
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']
+
+
+class ReservationSerializer(serializers.ModelSerializer):
+    property = serializers.PrimaryKeyRelatedField(
+        queryset=Property.objects.all())
+    users = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), many=True)
+
+    class Meta:
+        model = Reservation
+        fields = ['id', 'property', 'users', 'start_date', 'end_date']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['property'] = PropertySerializer(instance.property).data
+        representation['users'] = UserSerializer(
+            instance.users.all(), many=True).data
         return representation
