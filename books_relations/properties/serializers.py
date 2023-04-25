@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.core.mail import send_mail
+
 from .models import Property, FacilityCategory, FacilityItem, FacilitySubCategory, Reservation
 from django.contrib.auth.models import User
 
